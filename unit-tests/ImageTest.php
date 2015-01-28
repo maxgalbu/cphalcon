@@ -312,4 +312,20 @@ class ImageTest extends PHPUnit_Framework_TestCase
 		$image->crop("100", "100", "0.5", "0.5")->save('unit-tests/assets/production/gd-2259.jpg');
 		$this->assertTrue(file_exists('unit-tests/assets/production/gd-2259.jpg'));
 	}
+
+	public function testIssues3208()
+	{
+		$imageadapter = new Phalcon\Image\Adapter\Imagick('unit-tests/assets/phalconphp.jpg');
+		$imageadapter->save('unit-tests/assets/production/3208-1.jpg', '85');
+		$imageadapter->save('unit-tests/assets/production/3208-2.jpg', 85);
+
+		//Check if the files are the same
+		$this->assertEquals(
+			md5_file('unit-tests/assets/production/3208-1.jpg'),
+			md5_file('unit-tests/assets/production/3208-2.jpg')
+		);
+
+		@unlink('unit-tests/assets/production/3208-1.jpg');
+		@unlink('unit-tests/assets/production/3208-2.jpg');
+	}
 }
