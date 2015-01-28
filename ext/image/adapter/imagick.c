@@ -1270,6 +1270,7 @@ PHP_METHOD(Phalcon_Image_Adapter_Imagick, _save) {
 	zval *file, *quality, *exception_message;
 	zval *constant, *ret = NULL, *extension, *mime = NULL, *format, *type, *im, *fp = NULL, *mode, *compression;
 	zend_class_entry *imagick_ce;
+	int quality_integer;
 	char *ext;
 
 	PHALCON_MM_GROW();
@@ -1277,6 +1278,7 @@ PHP_METHOD(Phalcon_Image_Adapter_Imagick, _save) {
 	phalcon_fetch_params(1, 2, 0, &file, &quality);
 
 	imagick_ce = zend_fetch_class(SL("Imagick"), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
+	quality_integer = (int)phalcon_get_intval(quality);
 
 	PHALCON_INIT_VAR(constant);
 	if (!zend_get_constant(SL("PATHINFO_EXTENSION"), constant TSRMLS_CC)) {
@@ -1335,7 +1337,7 @@ PHP_METHOD(Phalcon_Image_Adapter_Imagick, _save) {
 			PHALCON_CALL_METHOD(NULL, im, "setImageCompression", compression );
 		}
 
-		PHALCON_CALL_METHOD(NULL, im, "setImageCompressionQuality", quality);
+		PHALCON_CALL_METHOD(NULL, im, "setImageCompressionQuality", quality_integer);
 		PHALCON_CALL_METHOD(&ret, im, "writeImage", file);
 	}
 
